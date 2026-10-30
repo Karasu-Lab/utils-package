@@ -1,3 +1,4 @@
+/// <reference path="./url-query-builder.d.ts" />
 import UrlQueryBuilder from '@enesusta/url-query-builder';
 
 export type UriQuery = Record<string, string | number | boolean | null | undefined>;

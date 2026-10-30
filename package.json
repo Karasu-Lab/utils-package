@@ -11,13 +11,15 @@
     "./email": "./src/email/index.ts",
     "./client": "./src/client/index.ts",
     "./validation": "./src/validation/index.ts",
-    "./constants": "./src/constants/index.ts"
+    "./constants": "./src/constants/index.ts",
+    "./uri": "./src/uri/index.ts"
   },
   "dependencies": {
-    "@karasu-lab/api-permissions": "workspace:*",
     "@better-auth/oauth-provider": "^1.7.12",
     "@better-auth/passkey": "1.7.12",
     "@better-auth/sso": "1.7.12",
+    "@enesusta/url-query-builder": "^1.0.0",
+    "@karasu-lab/api-permissions": "workspace:*",
     "@react-email/components": "^1.0.12",
     "better-auth": "^1.7.12",
     "jose": "^6.2.3",

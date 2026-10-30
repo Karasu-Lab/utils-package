@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { parseSetCookieHeader, toCookieOptions } from 'better-auth/cookies';
+import { buildUri } from '../uri';
 
 /**
  * Ends the better-auth session — the session every app trusts for "who is
@@ -44,6 +45,5 @@ export async function signOutAction(): Promise<void> {
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? '';
-  const next = appUrl ? `?next=${encodeURIComponent(appUrl)}` : '';
-  redirect(`${authUrl}/signout${next}`);
+  redirect(buildUri(`${authUrl}/signout`, { next: appUrl || undefined }));
 }

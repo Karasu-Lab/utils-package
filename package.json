@@ -1,7 +1,6 @@
 {
-  "name": "@Hashibutogarasu/utils",
+  "name": "@karasu-lab/utils",
   "version": "0.1.0",
-  "private": true,
   "exports": {
     "./server": "./src/server/index.ts",
     "./server/sign-out": "./src/server/sign-out.ts",
@@ -15,7 +14,7 @@
     "./constants": "./src/constants/index.ts"
   },
   "dependencies": {
-    "@Hashibutogarasu/api-permissions": "workspace:*",
+    "@karasu-lab/api-permissions": "workspace:*",
     "@better-auth/oauth-provider": "^1.7.12",
     "@better-auth/passkey": "1.7.12",
     "@better-auth/sso": "1.7.12",
@@ -35,5 +34,11 @@
     "next": "^15.3.9",
     "react": "^19",
     "typescript": "^5"
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }

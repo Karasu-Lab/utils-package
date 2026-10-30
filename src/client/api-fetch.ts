@@ -1,6 +1,6 @@
 /**
  * Updates the JWT `apiFetch` attaches automatically. Called by
- * `SessionProvider` (`@Hashibutogarasu/ui`) whenever its session state
+ * `SessionProvider` (`@karasu-lab/ui`) whenever its session state
  * changes. Backed by `sessionStorage` (scoped to this tab) rather than a
  * module-level variable, so it can't go stale across bundled copies of
  * this module.

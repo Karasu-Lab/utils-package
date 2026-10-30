@@ -1,6 +1,6 @@
-import { isPermitted, type AbstractPermission, type RouteAuthContext, type TokenValidator } from '@Hashibutogarasu/api-permissions';
+import { isPermitted, type AbstractPermission, type RouteAuthContext, type TokenValidator } from '@karasu-lab/api-permissions';
 
-export { toOauthScope, type RouteAuthContext, type RouteAuthMethod, type TokenValidator } from '@Hashibutogarasu/api-permissions';
+export { toOauthScope, type RouteAuthContext, type RouteAuthMethod, type TokenValidator } from '@karasu-lab/api-permissions';
 
 /**
  * Dependencies injected by the consuming app to bind the route guards

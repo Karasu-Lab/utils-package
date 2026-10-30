@@ -1,7 +1,7 @@
 /**
  * Requests a short-lived, single-use challenge token from the image API,
  * to be embedded into the next file uploaded to its anonymous/QR upload
- * endpoints (see `@Hashibutogarasu/challengetoken`).
+ * endpoints (see `@karasu-lab/challengetoken`).
  */
 export async function requestChallengeToken(apiUrl: string): Promise<string> {
   const res = await fetch(`${apiUrl}/challenge-token`, { method: 'POST' });

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "exports": {
     "./server": "./src/server/index.ts",
+    "./server/route-guards": "./src/server/route-guards.ts",
     "./server/sign-out": "./src/server/sign-out.ts",
     "./server/log": "./src/server/log.ts",
     "./server/vercel-bypass": "./src/server/vercel-bypass.ts",
@@ -19,7 +20,6 @@
     "@better-auth/passkey": "1.7.12",
     "@better-auth/sso": "1.7.12",
     "@enesusta/url-query-builder": "^1.0.0",
-    "@karasu-lab/api-permissions": "workspace:*",
     "@react-email/components": "^1.0.12",
     "better-auth": "^1.7.12",
     "jose": "^6.2.3",
@@ -27,8 +27,14 @@
     "zod": "^4.5.4"
   },
   "peerDependencies": {
+    "@karasu-lab/api-permissions": "workspace:*",
     "next": "^15.3.9",
     "react": "^19"
+  },
+  "peerDependenciesMeta": {
+    "@karasu-lab/api-permissions": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^20.19.1",

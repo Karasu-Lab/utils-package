@@ -1,4 +1,3 @@
-export { createRouteAuth, toOauthScope, type RouteAuthContext, type RouteAuthDeps, type RouteAuthMethod, type TokenValidator } from './route-guards';
 export { deleteUploadedImage, type DeleteUploadedImageOptions } from './delete-uploaded-image';
 export { uploadImage, type UploadImageOptions, type UploadImageResult } from './upload-image';
 export { uploadImageAnonymous, type UploadImageAnonymousOptions, type UploadImageAnonymousResult } from './upload-image-anonymous';

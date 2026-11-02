@@ -4,9 +4,10 @@
  * endpoints (see `@karasu-lab/challengetoken`).
  */
 export async function requestChallengeToken(apiUrl: string): Promise<string> {
-  const res = await fetch(`${apiUrl}/challenge-token`, { method: 'POST' });
-  if (!res.ok) throw new Error(`Failed to obtain challenge token: ${res.status}`);
+    const res = await fetch(`${apiUrl}/challenge-token`, { method: "POST" });
+    if (!res.ok)
+        throw new Error(`Failed to obtain challenge token: ${res.status}`);
 
-  const { token } = (await res.json()) as { token: string };
-  return token;
+    const { token } = (await res.json()) as { token: string };
+    return token;
 }

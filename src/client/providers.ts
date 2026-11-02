@@ -1,9 +1,9 @@
-import { ApiError } from './api-error';
+import { ApiError } from "./api-error";
 
 export interface ProviderProfile {
-  name: string | null;
-  email: string | null;
-  avatarUrl: string | null;
+    name: string | null;
+    email: string | null;
+    avatarUrl: string | null;
 }
 
 /**
@@ -12,10 +12,12 @@ export interface ProviderProfile {
  *
  * @throws {ApiError} When the request fails with a non-ok HTTP status.
  */
-export async function listLinkedProviders(): Promise<Record<string, ProviderProfile>> {
-  const res = await fetch('/api/users/me/providers');
-  if (!res.ok) throw ApiError.fromResponse(res);
-  return res.json() as Promise<Record<string, ProviderProfile>>;
+export async function listLinkedProviders(): Promise<
+    Record<string, ProviderProfile>
+> {
+    const res = await fetch("/api/users/me/providers");
+    if (!res.ok) throw ApiError.fromResponse(res);
+    return res.json() as Promise<Record<string, ProviderProfile>>;
 }
 
 /**
@@ -23,10 +25,14 @@ export async function listLinkedProviders(): Promise<Record<string, ProviderProf
  *
  * @throws {ApiError} When the request fails with a non-ok HTTP status.
  */
-export async function getProviderDetails(providerId: string): Promise<ProviderProfile> {
-  const res = await fetch(`/api/users/me/providers/${encodeURIComponent(providerId)}/details`);
-  if (!res.ok) throw ApiError.fromResponse(res);
-  return res.json() as Promise<ProviderProfile>;
+export async function getProviderDetails(
+    providerId: string,
+): Promise<ProviderProfile> {
+    const res = await fetch(
+        `/api/users/me/providers/${encodeURIComponent(providerId)}/details`,
+    );
+    if (!res.ok) throw ApiError.fromResponse(res);
+    return res.json() as Promise<ProviderProfile>;
 }
 
 /**
@@ -35,8 +41,11 @@ export async function getProviderDetails(providerId: string): Promise<ProviderPr
  * @throws {ApiError} When the request fails with a non-ok HTTP status.
  */
 export async function unlinkProvider(providerId: string): Promise<void> {
-  const res = await fetch(`/api/users/me/providers/${encodeURIComponent(providerId)}`, {
-    method: 'DELETE',
-  });
-  if (!res.ok && res.status !== 204) throw ApiError.fromResponse(res);
+    const res = await fetch(
+        `/api/users/me/providers/${encodeURIComponent(providerId)}`,
+        {
+            method: "DELETE",
+        },
+    );
+    if (!res.ok && res.status !== 204) throw ApiError.fromResponse(res);
 }

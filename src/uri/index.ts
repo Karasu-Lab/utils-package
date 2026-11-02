@@ -1,7 +1,10 @@
 /// <reference path="./url-query-builder.d.ts" />
-import UrlQueryBuilder from '@enesusta/url-query-builder';
+import UrlQueryBuilder from "@enesusta/url-query-builder";
 
-export type UriQuery = Record<string, string | number | boolean | null | undefined>;
+export type UriQuery = Record<
+    string,
+    string | number | boolean | null | undefined
+>;
 
 /**
  * Builds a URI from a base and a query object. The query is composed by
@@ -13,17 +16,17 @@ export type UriQuery = Record<string, string | number | boolean | null | undefin
  * every app.
  */
 export function buildUri(base: string, query: UriQuery = {}): string {
-  const entry: Record<string, string> = {};
-  for (const [key, value] of Object.entries(query)) {
-    if (value === null || value === undefined) continue;
-    entry[key] = encodeURIComponent(String(value));
-  }
-  if (Object.keys(entry).length === 0) return base;
-  const built = new UrlQueryBuilder(entry).build();
-  return base.includes('?') ? `${base}&${built.slice(1)}` : `${base}${built}`;
+    const entry: Record<string, string> = {};
+    for (const [key, value] of Object.entries(query)) {
+        if (value === null || value === undefined) continue;
+        entry[key] = encodeURIComponent(String(value));
+    }
+    if (Object.keys(entry).length === 0) return base;
+    const built = new UrlQueryBuilder(entry).build();
+    return base.includes("?") ? `${base}&${built.slice(1)}` : `${base}${built}`;
 }
 
 /** Builds the URI of a page that continues to `next` once it finishes (sign-in, sign-out, callbacks). */
 export function buildUriWithNext(base: string, next: string): string {
-  return buildUri(base, { next });
+    return buildUri(base, { next });
 }

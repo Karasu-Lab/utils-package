@@ -1,12 +1,12 @@
-import { apiFetch } from './api-fetch';
+import { apiFetch } from "./api-fetch";
 
 export interface DeleteUploadedImageOptions {
-  /** Base URL of the image API, e.g. `https://cdn.karasu256.com`. */
-  imageApiUrl: string;
-  /** The caller's raw `Cookie` request header, forwarded verbatim to authenticate the delete. Ignored when `token` is given. */
-  cookieHeader?: string | null;
-  /** JWT proving the caller's session (see `verifyAppJwt`), preferred over `cookieHeader` since it doesn't depend on the cookie reaching this app's own server. */
-  token?: string | null;
+    /** Base URL of the image API, e.g. `https://cdn.karasu256.com`. */
+    imageApiUrl: string;
+    /** The caller's raw `Cookie` request header, forwarded verbatim to authenticate the delete. Ignored when `token` is given. */
+    cookieHeader?: string | null;
+    /** JWT proving the caller's session (see `verifyAppJwt`), preferred over `cookieHeader` since it doesn't depend on the cookie reaching this app's own server. */
+    token?: string | null;
 }
 
 /**
@@ -19,21 +19,30 @@ export interface DeleteUploadedImageOptions {
  * given, and swallows delete failures since this is best-effort cleanup
  * that must never block the caller's primary update.
  */
-export async function deleteUploadedImage(iconUrl: string | null, options: DeleteUploadedImageOptions): Promise<void> {
-  if (!iconUrl) return;
+export async function deleteUploadedImage(
+    iconUrl: string | null,
+    options: DeleteUploadedImageOptions,
+): Promise<void> {
+    if (!iconUrl) return;
 
-  try {
-    const url = new URL(iconUrl);
-    if (url.origin !== new URL(options.imageApiUrl).origin) return;
-    const key = url.pathname.slice(1);
-    if (!key) return;
+    try {
+        const url = new URL(iconUrl);
+        if (url.origin !== new URL(options.imageApiUrl).origin) return;
+        const key = url.pathname.slice(1);
+        if (!key) return;
 
-    if (options.token) {
-      await apiFetch(`${options.imageApiUrl}/${key}`, { method: 'DELETE', token: options.token });
-    } else if (options.cookieHeader) {
-      await apiFetch(`${options.imageApiUrl}/${key}`, { method: 'DELETE', headers: { Cookie: options.cookieHeader } });
+        if (options.token) {
+            await apiFetch(`${options.imageApiUrl}/${key}`, {
+                method: "DELETE",
+                token: options.token,
+            });
+        } else if (options.cookieHeader) {
+            await apiFetch(`${options.imageApiUrl}/${key}`, {
+                method: "DELETE",
+                headers: { Cookie: options.cookieHeader },
+            });
+        }
+    } catch {
+        return;
     }
-  } catch {
-    return;
-  }
 }

@@ -1,7 +1,7 @@
-export interface ApiFetchOptions extends Omit<RequestInit, 'headers'> {
-  headers?: HeadersInit;
-  /** JWT to attach as `Authorization: Bearer <token>`. Omitted entirely when null or undefined. */
-  token?: string | null;
+export interface ApiFetchOptions extends Omit<RequestInit, "headers"> {
+    headers?: HeadersInit;
+    /** JWT to attach as `Authorization: Bearer <token>`. Omitted entirely when null or undefined. */
+    token?: string | null;
 }
 
 /**
@@ -11,10 +11,15 @@ export interface ApiFetchOptions extends Omit<RequestInit, 'headers'> {
  * server code, so a call site can never accidentally send an
  * unauthenticated request by forgetting to format the header itself.
  */
-export async function apiFetch(input: string | URL, options: ApiFetchOptions = {}): Promise<Response> {
-  const { token, headers, ...rest } = options;
-  return fetch(input, {
-    ...rest,
-    headers: token ? { ...headers, Authorization: `Bearer ${token}` } : headers,
-  });
+export async function apiFetch(
+    input: string | URL,
+    options: ApiFetchOptions = {},
+): Promise<Response> {
+    const { token, headers, ...rest } = options;
+    return fetch(input, {
+        ...rest,
+        headers: token
+            ? { ...headers, Authorization: `Bearer ${token}` }
+            : headers,
+    });
 }

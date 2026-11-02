@@ -7,6 +7,8 @@
  * deployment isn't protected, such as production), so callers can spread
  * this unconditionally into their own headers.
  */
-export function vercelProtectionBypassHeaders(secret: string | undefined): Record<string, string> {
-  return secret ? { 'x-vercel-protection-bypass': secret } : {};
+export function vercelProtectionBypassHeaders(
+    secret: string | undefined,
+): Record<string, string> {
+    return secret ? { "x-vercel-protection-bypass": secret } : {};
 }

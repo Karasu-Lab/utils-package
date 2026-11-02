@@ -6,19 +6,19 @@
  * this module.
  */
 export function setSessionToken(token: string | null): void {
-  if (token) sessionStorage.setItem('app-jwt', token);
-  else sessionStorage.removeItem('app-jwt');
+    if (token) sessionStorage.setItem("app-jwt", token);
+    else sessionStorage.removeItem("app-jwt");
 }
 
-export interface ApiFetchOptions extends Omit<RequestInit, 'headers'> {
-  headers?: HeadersInit;
-  /**
-   * JWT to attach as `Authorization: Bearer <token>`. Defaults to the token
-   * most recently reported via `setSessionToken`, so callers inside a
-   * `SessionProvider` never need to look it up themselves. Pass `null`
-   * explicitly to send the request without one.
-   */
-  token?: string | null;
+export interface ApiFetchOptions extends Omit<RequestInit, "headers"> {
+    headers?: HeadersInit;
+    /**
+     * JWT to attach as `Authorization: Bearer <token>`. Defaults to the token
+     * most recently reported via `setSessionToken`, so callers inside a
+     * `SessionProvider` never need to look it up themselves. Pass `null`
+     * explicitly to send the request without one.
+     */
+    token?: string | null;
 }
 
 /**
@@ -29,11 +29,17 @@ export interface ApiFetchOptions extends Omit<RequestInit, 'headers'> {
  * itself.
  */
 export async function apiFetch(
-  input: string | URL,
-  { token = sessionStorage.getItem('app-jwt'), headers, ...rest }: ApiFetchOptions = {}
+    input: string | URL,
+    {
+        token = sessionStorage.getItem("app-jwt"),
+        headers,
+        ...rest
+    }: ApiFetchOptions = {},
 ): Promise<Response> {
-  return fetch(input, {
-    ...rest,
-    headers: token ? { ...headers, Authorization: `Bearer ${token}` } : headers,
-  });
+    return fetch(input, {
+        ...rest,
+        headers: token
+            ? { ...headers, Authorization: `Bearer ${token}` }
+            : headers,
+    });
 }

@@ -1,19 +1,19 @@
-import { createAuthClient } from 'better-auth/react';
-import { oauthProviderClient } from '@better-auth/oauth-provider/client';
-import { passkeyClient } from '@better-auth/passkey/client';
-import { ssoClient } from '@better-auth/sso/client';
-import { multiSessionClient } from 'better-auth/client/plugins';
+import { oauthProviderClient } from "@better-auth/oauth-provider/client";
+import { passkeyClient } from "@better-auth/passkey/client";
+import { ssoClient } from "@better-auth/sso/client";
+import { multiSessionClient } from "better-auth/client/plugins";
+import { createAuthClient } from "better-auth/react";
 
 /**
  * Options for {@link createAppAuthClient}.
  */
 export interface CreateAppAuthClientOptions {
-  /**
-   * Base URL of the better-auth instance. Required when the caller is on a
-   * different origin than the worker hosting better-auth (e.g. karasu256.com
-   * calling api-auth.karasu256.com).
-   */
-  baseURL?: string;
+    /**
+     * Base URL of the better-auth instance. Required when the caller is on a
+     * different origin than the worker hosting better-auth (e.g. karasu256.com
+     * calling api-auth.karasu256.com).
+     */
+    baseURL?: string;
 }
 
 /**
@@ -30,27 +30,34 @@ export interface CreateAppAuthClientOptions {
  * endpoint.
  */
 export function createAppAuthClient(options: CreateAppAuthClientOptions = {}) {
-  const { baseURL } = options;
+    const { baseURL } = options;
 
-  const authClient = createAuthClient({
-    baseURL,
-    plugins: [oauthProviderClient(), multiSessionClient(), passkeyClient(), ssoClient()],
-  });
-
-  /**
-   * Ensures the browser holds a better-auth session for the current Firebase
-   * user before calling any session-gated `authClient` endpoint.
-   */
-  async function bridgeFirebaseSession(): Promise<void> {
-    const url = baseURL ? `${baseURL}/api/auth/firebase-bridge` : '/api/auth/firebase-bridge';
-
-    await fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: '{}',
+    const authClient = createAuthClient({
+        baseURL,
+        plugins: [
+            oauthProviderClient(),
+            multiSessionClient(),
+            passkeyClient(),
+            ssoClient(),
+        ],
     });
-  }
 
-  return { authClient, bridgeFirebaseSession };
+    /**
+     * Ensures the browser holds a better-auth session for the current Firebase
+     * user before calling any session-gated `authClient` endpoint.
+     */
+    async function bridgeFirebaseSession(): Promise<void> {
+        const url = baseURL
+            ? `${baseURL}/api/auth/firebase-bridge`
+            : "/api/auth/firebase-bridge";
+
+        await fetch(url, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: "{}",
+        });
+    }
+
+    return { authClient, bridgeFirebaseSession };
 }

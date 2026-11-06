@@ -1,6 +1,5 @@
 import {
     isPermitted,
-    type AbstractPermission,
     type RouteAuthContext,
     type TokenValidator,
 } from "@karasu-lab/api-permissions";
@@ -12,10 +11,6 @@ export {
     type TokenValidator,
 } from "@karasu-lab/api-permissions";
 
-/**
- * Dependencies injected by the consuming app to bind the route guards
- * to its own token storage.
- */
 export interface RouteAuthDeps {
     validator: TokenValidator;
 }
@@ -35,7 +30,7 @@ export type RouteHandler<TArgs extends RouteHandlerArgs = RouteHandlerArgs> = (
 interface RouteGuardMeta {
     allowApiKey: boolean;
     allowOauthApp: boolean;
-    permission: AbstractPermission | null;
+    permission: string | null;
 }
 
 interface WrappedRouteHandler<
@@ -59,19 +54,6 @@ function insufficientScope(): Response {
     return Response.json({ error: "insufficient_scope" }, { status: 403 });
 }
 
-/**
- * Returns route guard decorators bound to the given token validator.
- *
- * Mirrors the dependency-injection shape used elsewhere in this package —
- * the consuming app supplies the storage-backed implementations so this
- * package never depends on a database client directly.
- *
- * `APIKeyRoute`, `OauthAppRoute`, and `RequirePermission` may be composed in
- * any order (e.g. `APIKeyRoute()(OauthAppRoute()(RequirePermission(p)(handler)))`).
- * Each call only records intent on a metadata object shared by the wrapped
- * handler; the underlying wrapper performs authentication and permission
- * checks exactly once, after every decorator has been applied.
- */
 export function createRouteAuth(deps: RouteAuthDeps) {
     function ensureWrapped<TArgs extends RouteHandlerArgs>(
         handler: RouteHandler<TArgs> | GuardedRouteHandler<TArgs>,
@@ -101,7 +83,7 @@ export function createRouteAuth(deps: RouteAuthDeps) {
                     auth = {
                         userId: apiKeyResult.userId,
                         authMethod: "apiKey",
-                        permissions: apiKeyResult.permissions,
+                        permissionIds: apiKeyResult.permissionIds,
                         scopes: null,
                     };
                 }
@@ -114,7 +96,7 @@ export function createRouteAuth(deps: RouteAuthDeps) {
                     auth = {
                         userId: oauthResult.userId,
                         authMethod: "oauthApp",
-                        permissions: null,
+                        permissionIds: null,
                         scopes: oauthResult.scopes,
                     };
                 }
@@ -153,7 +135,7 @@ export function createRouteAuth(deps: RouteAuthDeps) {
 
     function RequirePermission<
         TArgs extends RouteHandlerArgs = RouteHandlerArgs,
-    >(permission: AbstractPermission) {
+    >(permission: string) {
         return (handler: RouteHandler<TArgs> | GuardedRouteHandler<TArgs>) => {
             const wrapped = ensureWrapped(handler);
             wrapped.__routeGuardMeta.permission = permission;

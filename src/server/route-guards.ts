@@ -33,8 +33,9 @@ interface RouteGuardMeta {
     permission: string | null;
 }
 
-interface WrappedRouteHandler<TArgs extends RouteHandlerArgs>
-    extends RouteHandler<TArgs> {
+interface WrappedRouteHandler<
+    TArgs extends RouteHandlerArgs,
+> extends RouteHandler<TArgs> {
     __routeGuardMeta: RouteGuardMeta;
     __innerHandler: GuardedRouteHandler<TArgs>;
 }
@@ -122,7 +123,9 @@ export function createRouteAuth(deps: RouteAuthDeps) {
         };
     }
 
-    function OauthAppRoute<TArgs extends RouteHandlerArgs = RouteHandlerArgs>() {
+    function OauthAppRoute<
+        TArgs extends RouteHandlerArgs = RouteHandlerArgs,
+    >() {
         return (handler: RouteHandler<TArgs> | GuardedRouteHandler<TArgs>) => {
             const wrapped = ensureWrapped(handler);
             wrapped.__routeGuardMeta.allowOauthApp = true;
@@ -130,9 +133,9 @@ export function createRouteAuth(deps: RouteAuthDeps) {
         };
     }
 
-    function RequirePermission<TArgs extends RouteHandlerArgs = RouteHandlerArgs>(
-        permission: string,
-    ) {
+    function RequirePermission<
+        TArgs extends RouteHandlerArgs = RouteHandlerArgs,
+    >(permission: string) {
         return (handler: RouteHandler<TArgs> | GuardedRouteHandler<TArgs>) => {
             const wrapped = ensureWrapped(handler);
             wrapped.__routeGuardMeta.permission = permission;

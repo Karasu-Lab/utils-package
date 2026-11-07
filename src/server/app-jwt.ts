@@ -4,7 +4,7 @@ import {
     jwtVerify,
     type JWTPayload,
 } from "jose";
-import { logError, logInfo } from "./log";
+import { log } from "./log";
 import { vercelProtectionBypassHeaders } from "./vercel-bypass";
 
 const jwksCache = new Map<string, ReturnType<typeof createRemoteJWKSet>>();
@@ -35,7 +35,7 @@ function getJwks(
                           .text()
                           .then((text) => text.slice(0, 500))
                           .catch(() => undefined);
-            logInfo("fetch_jwks", {
+            log("fetch_jwks", {
                 url,
                 status: res.status,
                 type: res.type,
@@ -58,10 +58,14 @@ export async function verifyAppJwt(
     protectionBypassSecret?: string,
 ): Promise<string | null> {
     if (!authUrl) {
-        logError("verify_app_jwt", {
-            result: "failure",
-            reason: "missing_auth_url",
-        });
+        log(
+            "verify_app_jwt",
+            {
+                result: "failure",
+                reason: "missing_auth_url",
+            },
+            "error",
+        );
         return null;
     }
 
@@ -72,19 +76,27 @@ export async function verifyAppJwt(
         );
         const sub = typeof payload.sub === "string" ? payload.sub : null;
         if (!sub) {
-            logError("verify_app_jwt", {
-                result: "failure",
-                reason: "missing_sub_claim",
-            });
+            log(
+                "verify_app_jwt",
+                {
+                    result: "failure",
+                    reason: "missing_sub_claim",
+                },
+                "error",
+            );
             return null;
         }
-        logInfo("verify_app_jwt", { result: "success", uid: sub });
+        log("verify_app_jwt", { result: "success", uid: sub });
         return sub;
     } catch (err) {
-        logError("verify_app_jwt", {
-            result: "failure",
-            error: err instanceof Error ? err.message : String(err),
-        });
+        log(
+            "verify_app_jwt",
+            {
+                result: "failure",
+                error: err instanceof Error ? err.message : String(err),
+            },
+            "error",
+        );
         return null;
     }
 }

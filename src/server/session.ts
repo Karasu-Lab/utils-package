@@ -1,6 +1,6 @@
 import { getSessionCookie } from "better-auth/cookies";
 import { headers } from "next/headers";
-import { logError, logInfo } from "./log";
+import { log } from "./log";
 import { vercelProtectionBypassHeaders } from "./vercel-bypass";
 
 /** The subset of better-auth's `user` model that callers across apps rely on. */
@@ -26,7 +26,7 @@ export async function getSessionUser(
     protectionBypassSecret?: string,
 ): Promise<SessionUser | null> {
     if (!authApiUrl) {
-        logInfo("get_session_user", {
+        log("get_session_user", {
             result: "skipped",
             reason: "missing_auth_url",
         });
@@ -35,7 +35,7 @@ export async function getSessionUser(
 
     const requestHeaders = await headers();
     if (!getSessionCookie(requestHeaders)) {
-        logInfo("get_session_user", {
+        log("get_session_user", {
             result: "skipped",
             reason: "no_session_cookie",
         });
@@ -52,21 +52,25 @@ export async function getSessionUser(
             cache: "no-store",
         });
         if (!res.ok) {
-            logError("get_session_user", {
-                result: "failure",
-                url,
-                status: res.status,
-            });
+            log(
+                "get_session_user",
+                {
+                    result: "failure",
+                    url,
+                    status: res.status,
+                },
+                "error",
+            );
             return null;
         }
 
         const data = (await res.json()) as GetSessionResponse;
         if (!data.user) {
-            logError("get_session_user", { result: "no_session" });
+            log("get_session_user", { result: "no_session" }, "error");
             return null;
         }
 
-        logInfo("get_session_user", { result: "success", uid: data.user.id });
+        log("get_session_user", { result: "success", uid: data.user.id });
         return {
             uid: data.user.id,
             email: data.user.email ?? null,
@@ -74,11 +78,15 @@ export async function getSessionUser(
             image: data.user.image ?? null,
         };
     } catch (err) {
-        logError("get_session_user", {
-            result: "error",
-            url,
-            error: err instanceof Error ? err.message : String(err),
-        });
+        log(
+            "get_session_user",
+            {
+                result: "error",
+                url,
+                error: err instanceof Error ? err.message : String(err),
+            },
+            "error",
+        );
         return null;
     }
 }

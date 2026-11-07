@@ -1,15 +1,17 @@
-/** Logs a structured, greppable info-level event as a single JSON line. */
-export function logInfo(
-    event: string,
-    data: Record<string, unknown> = {},
-): void {
-    console.log(JSON.stringify({ event, ...data }));
-}
+export type LogLevel = "info" | "warn" | "error";
 
-/** Logs a structured, greppable error-level event as a single JSON line. */
-export function logError(
+/** Logs a structured, greppable event as a single JSON line at the given level. */
+export function log(
     event: string,
     data: Record<string, unknown> = {},
+    level: LogLevel = "info",
 ): void {
-    console.error(JSON.stringify({ event, ...data }));
+    const line = JSON.stringify({ event, ...data, level });
+    if (level === "warn") {
+        console.warn(line);
+    } else if (level === "error") {
+        console.error(line);
+    } else {
+        console.log(line);
+    }
 }

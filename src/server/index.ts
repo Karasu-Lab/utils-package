@@ -5,7 +5,7 @@ export {
     type DeleteUploadedImageOptions,
 } from "./delete-uploaded-image";
 export { getRootAppUrl } from "./get-root-app-url";
-export { logError, logInfo } from "./log";
+export { log, type LogLevel } from "./log";
 export { MissingEnvError } from "./missing-env-error";
 export { requestChallengeToken } from "./request-challenge-token";
 export {

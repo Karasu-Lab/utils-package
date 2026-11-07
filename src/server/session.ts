@@ -26,19 +26,11 @@ export async function getSessionUser(
     protectionBypassSecret?: string,
 ): Promise<SessionUser | null> {
     if (!authApiUrl) {
-        log("get_session_user", {
-            result: "skipped",
-            reason: "missing_auth_url",
-        });
         return null;
     }
 
     const requestHeaders = await headers();
     if (!getSessionCookie(requestHeaders)) {
-        log("get_session_user", {
-            result: "skipped",
-            reason: "no_session_cookie",
-        });
         return null;
     }
 
@@ -70,7 +62,6 @@ export async function getSessionUser(
             return null;
         }
 
-        log("get_session_user", { result: "success", uid: data.user.id });
         return {
             uid: data.user.id,
             email: data.user.email ?? null,
